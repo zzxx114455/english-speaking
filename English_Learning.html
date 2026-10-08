@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語口說 · 單詞5000 + 短語500 · 每日20 · TTS示範</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      display: flex; justify-content: center; align-items: center; padding: 1rem;
+    }
+    .app-container {
+      background: rgba(30, 41, 59, 0.92);
+      backdrop-filter: blur(8px);
+      border-radius: 2.5rem;
+      padding: 1.6rem 1.5rem;
+      max-width: 860px; width: 100%;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+    h1 {
+      font-size: 1.8rem; font-weight: 600; text-align: center;
+      color: #f0f9ff; text-shadow: 0 4px 10px rgba(0, 180, 255, 0.4);
+      letter-spacing: 1px; margin-bottom: 0.25rem;
+    }
+    .subhead {
+      text-align: center; color: #94a3b8; font-size: 0.85rem;
+      margin-bottom: 1rem; border-bottom: 1px dashed #334155;
+      padding-bottom: 0.8rem; display: flex; justify-content: center;
+      gap: 0.8rem; flex-wrap: wrap;
+    }
+    .badge {
+      background: #1e2d3e; border-radius: 40px; padding: 0.2rem 0.9rem;
+      color: #b9e6ff; font-weight: 500; font-size: 0.8rem;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      border: 1px solid #3f5569;
+    }
+    .review-badge { background: #4a2e1e; border-color: #a86b2e; color: #f7b731; }
+    /* 模式切換 */
+    .mode-switch {
+      display: flex; justify-content: center; gap: 0.5rem;
+      margin-bottom: 1rem; background: #0f1a26;
+      border-radius: 60px; padding: 0.3rem; border: 1px solid #2d3f55;
+    }
+    .mode-btn {
+      flex: 1; background: transparent; border: none;
+      color: #7f8ea3; padding: 0.7rem 0.5rem; border-radius: 60px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center;
+      justify-content: center; gap: 0.4rem;
+    }
+    .mode-btn.active {
+      background: #0066cc; color: white;
+      box-shadow: 0 0 16px #0066cc90;
+    }
+    .mode-btn:not(.active):hover { background: #1e2a3a; color: #cbd5e1; }
+    .mode-btn .count-badge {
+      font-size: 0.7rem; background: #00000040;
+      padding: 0.1rem 0.5rem; border-radius: 20px;
+    }
+    /* 單詞/短語展示區 */
+    .word-display {
+      background: #0b1622; border-radius: 2rem; padding: 1.4rem 1rem 1.2rem;
+      margin-bottom: 1rem; text-align: center;
+      border: 1px solid #2d3a4e;
+      box-shadow: inset 0 8px 12px rgba(0, 0, 0, 0.6), 0 10px 20px rgba(0, 0, 0, 0.4);
+      min-height: 200px; display: flex; flex-direction: column; justify-content: center;
+      position: relative;
+    }
+    .current-word {
+      font-size: 3.2rem; font-weight: 700; color: #e2e8f0;
+      line-height: 1.25; word-break: break-word; letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0, 200, 255, 0.5);
+    }
+    .current-word.phrase-mode {
+      font-size: 2rem; line-height: 1.4; color: #b9e6ff;
+      text-shadow: 0 2px 8px rgba(0, 180, 255, 0.6);
+    }
+    .translation-display {
+      font-size: 1.1rem; color: #94a3b8; margin-top: 0.5rem;
+      font-style: italic; letter-spacing: 0.5px; min-height: 1.6rem;
+    }
+    /* TTS 按鈕 */
+    .tts-row {
+      display: flex; justify-content: center; gap: 0.6rem;
+      margin-top: 0.9rem; flex-wrap: wrap;
+    }
+    .tts-btn {
+      background: #1e3a5f;
+      border: 1px solid #3a6a9a;
+      color: #b9e6ff;
+      padding: 0.5rem 1.1rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s;
+      box-shadow: 0 4px 0 #0a1a2a, 0 6px 12px #00000060;
+    }
+    .tts-btn:hover {
+      background: #264e7a;
+      box-shadow: 0 4px 0 #0a1a2a, 0 6px 16px #0066cc60;
+    }
+    .tts-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0a1a2a, 0 6px 12px #00000060;
+    }
+    .tts-btn.speaking {
+      background: #0077ee;
+      border-color: #2b8aff;
+      color: white;
+      animation: pulse 1.2s infinite;
+    }
+    .tts-btn.slow {
+      background: #1e4a3a;
+      border-color: #3a8a6a;
+      color: #b9ffd9;
+    }
+    .tts-btn.slow:hover {
+      background: #2a6a52;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 4px 0 #0a1a2a, 0 0 0 0 #0066cc80; }
+      50% { box-shadow: 0 4px 0 #0a1a2a, 0 0 0 8px #0066cc00; }
+    }
+    .word-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 0.6rem; color: #7f8ea3; font-size: 0.85rem;
+      padding: 0 0.5rem; flex-wrap: wrap; gap: 0.4rem;
+    }
+    /* 評分區 */
+    .score-section {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.8rem; margin: 0.8rem 0 0.4rem; background: #0f1a26;
+      border-radius: 60px; padding: 0.4rem 0.4rem 0.4rem 1.2rem;
+      border: 1px solid #2d3f55; flex-wrap: wrap;
+    }
+    .score-label { color: #94a3b8; font-weight: 500; font-size: 0.9rem; }
+    .score-badge {
+      background: #1e2d3e; border-radius: 40px; padding: 0.4rem 1.2rem;
+      font-weight: 700; font-size: 1.4rem; color: #b9e6ff;
+      box-shadow: inset 0 2px 6px #00000080, 0 4px 8px #00000040;
+      border: 1px solid #3f5569; text-align: center; min-width: 90px;
+    }
+    .score-value {
+      font-weight: 800; color: #4cd964; text-shadow: 0 0 12px #4cd96480;
+    }
+    .low-score-hint {
+      font-size: 0.75rem; color: #f7b731; background: #2a2e1a;
+      padding: 0.2rem 0.7rem; border-radius: 20px; border: 1px solid #5e4a1a;
+    }
+    /* 進度條 */
+    .progress-area {
+      margin: 0.9rem 0 0.5rem; display: flex; align-items: center; gap: 0.7rem;
+    }
+    .progress-bar-bg {
+      flex: 1; height: 10px; background: #1e2a3a; border-radius: 20px;
+      overflow: hidden; box-shadow: inset 0 2px 6px black;
+    }
+    .progress-fill {
+      width: 0%; height: 100%;
+      background: linear-gradient(90deg, #00c6fb, #00ffb3);
+      border-radius: 20px; transition: width 0.25s ease;
+      box-shadow: 0 0 10px #00ffb3;
+    }
+    .counter {
+      color: #b9c7d9; font-weight: 500; font-size: 0.85rem;
+      background: #1e2a3a; padding: 0.2rem 0.9rem;
+      border-radius: 30px; white-space: nowrap;
+    }
+    /* 控制按鈕 */
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 0.7rem;
+      justify-content: center; margin: 1rem 0 0.6rem;
+    }
+    .btn {
+      border: none; background: #263445; color: #e7edf5;
+      font-weight: 600; font-size: 0.95rem; padding: 0.75rem 1.2rem;
+      border-radius: 60px; cursor: pointer; display: inline-flex;
+      align-items: center; justify-content: center; gap: 0.4rem;
+      transition: all 0.1s; box-shadow: 0 5px 0 #0f141c, 0 6px 14px #00000070;
+      border: 1px solid #40546b; flex: 1 1 auto; min-width: 110px;
+    }
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #0f141c, 0 6px 14px #00000070;
+    }
+    .btn-primary {
+      background: #0066cc; border-color: #2b8aff;
+      box-shadow: 0 5px 0 #003166, 0 6px 14px #00000090;
+      color: white; font-weight: 700;
+    }
+    .btn-primary:active { box-shadow: 0 1px 0 #003166, 0 6px 14px #00000090; }
+    .btn-secondary { background: #2d3b4f; }
+    .btn:disabled {
+      opacity: 0.4; transform: translateY(4px);
+      box-shadow: 0 1px 0 #0f141c, 0 6px 14px #00000070;
+      pointer-events: none; filter: grayscale(0.6);
+    }
+    .status-msg {
+      text-align: center; margin: 0.7rem 0 0.2rem; color: #9ab3cc;
+      font-size: 0.9rem; min-height: 2.2rem; display: flex;
+      align-items: center; justify-content: center; gap: 0.4rem; flex-wrap: wrap;
+    }
+    .footer-note {
+      text-align: center; color: #4f6580; font-size: 0.7rem;
+      margin-top: 1rem; border-top: 1px solid #1e2a3a; padding-top: 0.8rem;
+      display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap;
+    }
+    .review-tag { color: #f7b731; font-weight: 600; }
+    /* TTS 設置小面板 */
+    .tts-settings {
+      display: flex; justify-content: center; gap: 0.6rem;
+      margin-bottom: 0.8rem; flex-wrap: wrap; align-items: center;
+    }
+    .tts-settings label {
+      color: #7f8ea3; font-size: 0.78rem; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .tts-settings select, .tts-settings input[type="range"] {
+      background: #1e2a3a; color: #cbd5e1; border: 1px solid #3f5569;
+      border-radius: 20px; padding: 0.25rem 0.6rem; font-size: 0.78rem;
+      cursor: pointer; outline: none;
+    }
+    .tts-settings select { max-width: 150px; }
+    .tts-settings input[type="range"] {
+      width: 80px; padding: 0; height: 4px;
+      accent-color: #0066cc;
+    }
+    .pos-tag {
+      display: inline-block; background: #1e4a3a; color: #b9ffd9;
+      border: 1px solid #3a8a6a; border-radius: 20px; padding: 0 0.6rem;
+      font-size: 0.9rem; font-style: normal; margin-right: 0.4rem;
+    }
+    .secure-warn {
+      margin-top: 0.6rem; padding: 0.6rem 0.9rem; border-radius: 1rem;
+      background: #3a2a12; border: 1px solid #a86b2e; color: #f7d08a;
+      font-size: 0.8rem; line-height: 1.5;
+    }
+    .level-switch { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.8rem; }
+    .level-btn {
+      background: #1e2a3a; color: #94a3b8; border: 1px solid #3f5569;
+      border-radius: 40px; padding: 0.35rem 1.1rem; font-size: 0.85rem;
+      font-weight: 600; cursor: pointer;
+    }
+    .level-btn.active { background: #1e4a3a; color: #b9ffd9; border-color: #3a8a6a; }
+    #wordPhonetic { color: #b9e6ff; font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <h1>🎤 英語口說 · 每日20</h1>
+  <div class="subhead">
+    <span class="badge">📅 今日 <span id="todayCount">0</span>/20</span>
+    <span class="badge review-badge">🔁 待複習 <span id="reviewCount">0</span></span>
+    <span class="badge">📚 <span id="totalProgress">0</span>%</span>
+  </div>
+
+  <!-- 模式切換 -->
+  <div class="mode-switch">
+    <button class="mode-btn active" id="modeWordBtn">📖 單詞 <span class="count-badge" id="wordCountBadge">45</span></button>
+    <button class="mode-btn" id="modePhraseBtn">💬 常用短語 <span class="count-badge">500</span></button>
+  </div>
+
+  <!-- 難度選擇 -->
+  <div class="level-switch" id="levelSwitch">
+    <button class="level-btn active" data-level="easy">🌱 初級</button>
+    <button class="level-btn" data-level="mid">🌿 中級</button>
+    <button class="level-btn" data-level="hard">🌳 高級</button>
+  </div>
+
+  <!-- TTS 設置 -->
+  <div class="tts-settings">
+    <label>🎙️ 語音
+      <select id="voiceSelect"></select>
+    </label>
+    <label>⚡ 語速
+      <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="1.0">
+      <span id="rateValue" style="color:#b9e6ff; font-weight:600;">1.0x</span>
+    </label>
+  </div>
+
+  <!-- 單詞/短語展示區 -->
+  <div class="word-display">
+    <div class="current-word" id="wordDisplay">apple</div>
+    <div class="translation-display" id="translationDisplay"></div>
+
+    <!-- TTS 按鈕行 -->
+    <div class="tts-row">
+      <button class="tts-btn" id="ttsNormalBtn" title="正常語速朗讀">🔊 聽發音</button>
+      <button class="tts-btn slow" id="ttsSlowBtn" title="慢速朗讀">🐢 慢速</button>
+    </div>
+
+    <div class="word-meta">
+      <span>#<span id="wordIndex">1</span>/20</span>
+      <span id="phoneticWrapper">🔊 <span id="wordPhonetic">/ˈæp.əl/</span></span>
+      <span id="reviewTag" class="review-tag" style="display:none;">🔁 複習</span>
+    </div>
+  </div>
+
+  <!-- 評分區域 -->
+  <div class="score-section">
+    <span class="score-label">本次得分</span>
+    <div class="score-badge"><span class="score-value" id="scoreDisplay">—</span></div>
+    <span id="lowScoreHint" class="low-score-hint" style="display:none;">低於50分 · 明日複習</span>
+  </div>
+
+  <!-- 進度條 -->
+  <div class="progress-area">
+    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+    <div class="counter" id="progressCounter">0/20</div>
+  </div>
+
+  <!-- 控制按鈕 -->
+  <div class="controls">
+    <button class="btn btn-primary" id="startBtn">🎤 開始發音</button>
+    <button class="btn btn-secondary" id="nextBtn">⏭️ 下一個</button>
+    <button class="btn btn-secondary" id="resetBtn">🔄 重置今日</button>
+  </div>
+
+  <!-- 狀態訊息 -->
+  <div class="status-msg" id="statusMsg"><span>點擊「聽發音」先聽，再點擊「開始發音」練習</span></div>
+  <div class="secure-warn" id="secureWarn" style="display:none;"></div>
+
+  <div class="footer-note">
+    <span>⚡ 低於50分自動加入明日複習</span>
+    <span>🗓️ 每日自動更新20詞</span>
+    <span>🔀 單詞/短語獨立進度</span>
+    <span>🔊 TTS 發音示範</span>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 1. 詞庫數據
+// ============================================================
+const LEVEL_DATA = {
+  easy: `apple|n.|蘋果|ˈæpḷ
+water|n.|水|ˈwɔtɚ
+friend|n.|朋友|frɛnd
+family|n.|家庭|ˈfæməlɪ
+happy|adj.|快樂的|ˈhæpɪ
+school|n.|學校|skul
+teacher|n.|老師|ˈtitʃɚ
+morning|n.|早晨|ˈmɔrnɪŋ
+house|n.|房子|haʊs
+dog|n.|狗|dɔɡ
+cat|n.|貓|kæt
+book|n.|書|bʊk
+eat|v.|吃|it
+drink|v.|喝|drɪŋk
+sleep|v.|睡覺|slip
+walk|v.|走路|wɔk
+run|v.|跑|rʌn
+read|v.|閱讀|rid
+write|v.|寫|raɪt
+speak|v.|說話|spik
+big|adj.|大的|bɪɡ
+small|adj.|小的|smɔl
+hot|adj.|熱的|hɑt
+cold|adj.|冷的|kold
+new|adj.|新的|nju
+old|adj.|老的|old
+good|adj.|好的|ɡʊd
+bad|adj.|壞的|bæd
+red|adj.|紅色的|rɛd
+blue|adj.|藍色的|blu
+food|n.|食物|fud
+money|n.|錢|ˈmʌnɪ
+time|n.|時間|taɪm
+day|n.|天|de
+night|n.|夜晚|naɪt
+sun|n.|太陽|sʌn
+moon|n.|月亮|mun
+tree|n.|樹|tri
+rain|n./v.|雨；下雨|ren
+city|n.|城市|ˈsɪtɪ
+car|n.|汽車|kɑr
+phone|n.|電話|fon
+love|n./v.|愛|lʌv
+help|n./v.|幫助|hɛlp
+play|v.|玩；播放|ple`,
+  mid: `important|adj.|重要的|ɪmˈpɔrtṇt
+environment|n.|環境|ɪnˈvaɪrənmənt
+experience|n./v.|經驗；體驗|ɪkˈspɪrɪəns
+opportunity|n.|機會|ˌɑpɚˈtjunətɪ
+decision|n.|決定|dɪˈsɪʒən
+develop|v.|發展|dɪˈvɛləp
+culture|n.|文化|ˈkʌltʃɚ
+knowledge|n.|知識|ˈnɑlɪdʒ
+improve|v.|改善|ɪmˈpruv
+success|n.|成功|səkˈsɛs
+challenge|n./v.|挑戰|ˈtʃælɪndʒ
+community|n.|社區|kəˈmjunətɪ
+government|n.|政府|ˈɡʌvɚnmənt
+education|n.|教育|ˌɛdʒəˈkeʃən
+relationship|n.|關係|rɪˈleʃənˌʃɪp
+responsible|adj.|負責的|rɪˈspɑnsəbḷ
+imagine|v.|想像|ɪˈmædʒɪn
+discover|v.|發現|dɪˈskʌvɚ
+achieve|v.|達成|əˈtʃiv
+article|n.|文章|ˈɑrtɪkḷ
+available|adj.|可用的|əˈveləbḷ
+benefit|n./v.|好處；受益|ˈbɛnəfɪt
+career|n.|職涯|kəˈrɪr
+comfortable|adj.|舒適的|ˈkʌmfɚtəbḷ
+consider|v.|考慮|kənˈsɪdɚ
+create|v.|創造|kriˈet
+describe|v.|描述|dɪˈskraɪb
+difference|n.|差異|ˈdɪfərəns
+effective|adj.|有效的|ɪˈfɛktɪv
+energy|n.|能量|ˈɛnɚdʒɪ
+journey|n.|旅程|ˈdʒɝnɪ
+local|adj.|當地的|ˈlokḷ
+manage|v.|管理；設法|ˈmænɪdʒ
+necessary|adj.|必要的|ˈnɛsəˌsɛrɪ
+opinion|n.|意見|əˈpɪnjən
+patient|n./adj.|病人；有耐心的|ˈpeʃənt
+popular|adj.|受歡迎的|ˈpɑpjəlɚ
+promise|n./v.|承諾|ˈprɑmɪs
+quality|n.|品質|ˈkwɑlətɪ
+realize|v.|意識到|ˈrɪəˌlaɪz
+recommend|v.|推薦|ˌrɛkəˈmɛnd
+research|n./v.|研究|ˈrisɝtʃ
+society|n.|社會|səˈsaɪətɪ
+tradition|n.|傳統|trəˈdɪʃən`,
+  hard: `ambiguous|adj.|模稜兩可的|æmˈbɪɡjuəs
+meticulous|adj.|一絲不苟的|məˈtɪkjələs
+ephemeral|adj.|短暫的|ɪˈfɛmərəl
+resilient|adj.|有韌性的|rɪˈzɪljənt
+pragmatic|adj.|務實的|præɡˈmætɪk
+inevitable|adj.|不可避免的|ɪnˈɛvətəbḷ
+eloquent|adj.|雄辯的|ˈɛləkwənt
+scrutinize|v.|仔細審查|ˈskrutṇˌaɪz
+mitigate|v.|減輕|ˈmɪtəˌɡet
+paradigm|n.|典範|ˈpærəˌdaɪm
+ubiquitous|adj.|無所不在的|juˈbɪkwətəs
+serendipity|n.|意外發現的幸運|ˌsɛrənˈdɪpətɪ
+conundrum|n.|難題|kəˈnʌndrəm
+nuance|n.|細微差別|ˈnjuɑns
+reluctant|adj.|不情願的|rɪˈlʌktənt
+substantiate|v.|證實|səbˈstænʃɪˌet
+ambivalent|adj.|矛盾的|æmˈbɪvələnt
+benevolent|adj.|仁慈的|bəˈnɛvələnt
+candid|adj.|坦率的|ˈkændɪd
+dilemma|n.|兩難|dɪˈlɛmə
+empirical|adj.|實證的|ɛmˈpɪrɪkḷ
+facilitate|v.|促進|fəˈsɪləˌtet
+gregarious|adj.|愛交際的|ɡrɪˈɡɛrɪəs
+hypothesis|n.|假說|haɪˈpɑθəsɪs
+illuminate|v.|照亮；闡明|ɪˈluməˌnet
+juxtapose|v.|並列對照|ˈdʒʌkstəˌpoz
+lucrative|adj.|賺錢的|ˈlukrətɪv
+meander|v.|蜿蜒|mɪˈændɚ
+obsolete|adj.|過時的|ˌɑbsəˈlit
+perpetual|adj.|永久的|pɚˈpɛtʃuəl
+quintessential|adj.|典型的|ˌkwɪntəˈsɛnʃəl
+rhetoric|n.|修辭|ˈrɛtərɪk
+skeptical|adj.|懷疑的|ˈskɛptɪkḷ
+tenacious|adj.|堅韌的|tɪˈneʃəs
+unprecedented|adj.|史無前例的|ʌnˈprɛsəˌdɛntɪd
+vulnerable|adj.|脆弱的|ˈvʌlnərəbḷ
+whimsical|adj.|異想天開的|ˈhwɪmzɪkḷ
+alleviate|v.|緩解|əˈliviˌet
+bureaucracy|n.|官僚體制|bjʊˈrɑkrəsɪ
+coherent|adj.|連貫的|koˈhɪrənt
+diligent|adj.|勤勉的|ˈdɪlədʒənt
+exacerbate|v.|使惡化|ɪɡˈzæsɚˌbet
+frugal|adj.|節儉的|ˈfruɡḷ
+inherent|adj.|固有的|ɪnˈhɪrənt
+profound|adj.|深刻的|prəˈfaʊnd`
+};
+const LEVEL_NAMES = { easy: '初級', mid: '中級', hard: '高級' };
+const WORD_LISTS = {};
+Object.keys(LEVEL_DATA).forEach(lv => {
+  WORD_LISTS[lv] = LEVEL_DATA[lv].trim().split('\n').map(line => {
+    const [word, pos, translation, kk] = line.split('|');
+    return { word, pos, translation, kk: `[${kk}]` };
+  });
+});
+
+const PHRASE_LIST = [
+  { en: "It's on me.", zh: "我請客。" },
+  { en: "How are you doing?", zh: "你好嗎？" },
+  { en: "What's up?", zh: "怎麼了？/ 最近怎樣？" },
+  { en: "Long time no see.", zh: "好久不見。" },
+  { en: "Nice to meet you.", zh: "很高興見到你。" },
+  { en: "See you later.", zh: "待會見。" },
+  { en: "Take care.", zh: "保重。" },
+  { en: "Have a nice day.", zh: "祝你有美好的一天。" },
+  { en: "Good luck.", zh: "祝你好運。" },
+  { en: "Congratulations!", zh: "恭喜！" },
+  { en: "Happy birthday!", zh: "生日快樂！" },
+  { en: "Merry Christmas!", zh: "聖誕快樂！" },
+  { en: "Happy New Year!", zh: "新年快樂！" },
+  { en: "Thank you so much.", zh: "非常感謝。" },
+  { en: "You're welcome.", zh: "不客氣。" },
+  { en: "I'm sorry.", zh: "對不起。" },
+  { en: "No problem.", zh: "沒問題。" },
+  { en: "Excuse me.", zh: "打擾一下。" },
+  { en: "Never mind.", zh: "沒關係。" },
+  { en: "Of course.", zh: "當然。" },
+  { en: "I don't know.", zh: "我不知道。" },
+  { en: "I think so.", zh: "我也這麼認為。" },
+  { en: "I hope so.", zh: "希望如此。" },
+  { en: "I'm not sure.", zh: "我不確定。" },
+  { en: "What do you mean?", zh: "你是什麼意思？" },
+  { en: "What happened?", zh: "發生了什麼事？" },
+  { en: "What time is it?", zh: "幾點了？" },
+  { en: "Where are you from?", zh: "你來自哪裡？" },
+  { en: "How old are you?", zh: "你多大了？" },
+  { en: "What's your name?", zh: "你叫什麼名字？" },
+  { en: "My name is John.", zh: "我叫約翰。" },
+  { en: "I'm from China.", zh: "我來自中國。" },
+  { en: "I live in Taipei.", zh: "我住在臺北。" },
+  { en: "I work as a teacher.", zh: "我是一名老師。" },
+  { en: "I'm a student.", zh: "我是學生。" },
+  { en: "I like reading.", zh: "我喜歡閱讀。" },
+  { en: "I love music.", zh: "我熱愛音樂。" },
+  { en: "I enjoy traveling.", zh: "我喜歡旅行。" },
+  { en: "I'm learning English.", zh: "我在學英語。" },
+  { en: "Can you help me?", zh: "你能幫我嗎？" },
+  { en: "Could you repeat that?", zh: "你能重複一遍嗎？" },
+  { en: "Could you speak slower?", zh: "你能說慢一點嗎？" },
+  { en: "I don't understand.", zh: "我不明白。" },
+  { en: "What does this mean?", zh: "這是什麼意思？" },
+  { en: "How do you say this in English?", zh: "這個用英語怎麼說？" },
+  { en: "How much is it?", zh: "多少錢？" },
+  { en: "That's too expensive.", zh: "太貴了。" },
+  { en: "Can I have a discount?", zh: "可以打折嗎？" },
+  { en: "I'll take it.", zh: "我買了。" },
+  { en: "I'm just looking.", zh: "我只是看看。" },
+  { en: "Where is the restroom?", zh: "洗手間在哪裡？" },
+  { en: "Where is the station?", zh: "車站在哪裡？" },
+  { en: "How can I get there?", zh: "我怎麼去那裡？" },
+  { en: "Is it far from here?", zh: "離這裡遠嗎？" },
+  { en: "Turn left at the corner.", zh: "在拐角處左轉。" },
+  { en: "Go straight ahead.", zh: "一直往前走。" },
+  { en: "It's next to the bank.", zh: "在銀行旁邊。" },
+  { en: "I'm lost.", zh: "我迷路了。" },
+  { en: "Can you show me on the map?", zh: "你能在地圖上指給我看嗎？" },
+  { en: "I'd like to order.", zh: "我想點餐。" },
+  { en: "Can I see the menu?", zh: "我可以看功能表嗎？" },
+  { en: "What do you recommend?", zh: "你推薦什麼？" },
+  { en: "I'll have the same.", zh: "我要一樣的。" },
+  { en: "No spicy, please.", zh: "請不要辣。" },
+  { en: "The bill, please.", zh: "請結帳。" },
+  { en: "It's delicious.", zh: "很好吃。" },
+  { en: "I'm full.", zh: "我吃飽了。" },
+  { en: "Cheers!", zh: "乾杯！" },
+  { en: "Let's go.", zh: "我們走吧。" },
+  { en: "Hurry up.", zh: "快點。" },
+  { en: "Wait a moment.", zh: "等一下。" },
+  { en: "I'm busy now.", zh: "我現在很忙。" },
+  { en: "I'm free tomorrow.", zh: "我明天有空。" },
+  { en: "Let's meet at six.", zh: "我們六點見。" },
+  { en: "What's the plan?", zh: "有什麼計畫？" },
+  { en: "Sounds good.", zh: "聽起來不錯。" },
+  { en: "That's a great idea.", zh: "好主意。" },
+  { en: "I agree with you.", zh: "我同意你的看法。" },
+  { en: "I disagree.", zh: "我不同意。" },
+  { en: "Maybe later.", zh: "也許以後吧。" },
+  { en: "It depends.", zh: "看情況。" },
+  { en: "No way.", zh: "不行。/ 不可能。" },
+  { en: "Come on!", zh: "加油！/ 拜託！" },
+  { en: "Calm down.", zh: "冷靜點。" },
+  { en: "Don't worry.", zh: "別擔心。" },
+  { en: "Take it easy.", zh: "放輕鬆。" },
+  { en: "Well done!", zh: "做得好！" },
+  { en: "Good job!", zh: "幹得好！" },
+  { en: "Keep going.", zh: "繼續加油。" },
+  { en: "You can do it.", zh: "你能做到的。" },
+  { en: "I'm proud of you.", zh: "我為你感到驕傲。" },
+  { en: "I miss you.", zh: "我想你。" },
+  { en: "I love you.", zh: "我愛你。" },
+  { en: "You're so kind.", zh: "你真好。" },
+  { en: "That's so funny.", zh: "太搞笑了。" },
+  { en: "I'm so happy.", zh: "我好開心。" },
+  { en: "I'm so sad.", zh: "我好難過。" },
+  { en: "I'm tired.", zh: "我累了。" },
+  { en: "I'm hungry.", zh: "我餓了。" },
+  { en: "I'm thirsty.", zh: "我渴了。" },
+  { en: "I'm cold.", zh: "我好冷。" },
+  { en: "I'm hot.", zh: "我好熱。" },
+  { en: "I'm sick.", zh: "我生病了。" },
+  { en: "I feel better now.", zh: "我現在好多了。" },
+  { en: "Get well soon.", zh: "早日康復。" },
+  { en: "Bless you.", zh: "保佑你。（打噴嚏時）" },
+  { en: "Good morning.", zh: "早上好。" },
+  { en: "Good afternoon.", zh: "下午好。" },
+  { en: "Good evening.", zh: "晚上好。" },
+  { en: "Good night.", zh: "晚安。" },
+  { en: "Sweet dreams.", zh: "好夢。" },
+  { en: "Have a safe trip.", zh: "一路平安。" },
+  { en: "Welcome back.", zh: "歡迎回來。" },
+  { en: "Enjoy your meal.", zh: "請慢用。" },
+  { en: "After you.", zh: "您先請。" },
+  { en: "Ladies first.", zh: "女士優先。" },
+  { en: "Hold on.", zh: "稍等。" },
+  { en: "I'll be right back.", zh: "我馬上回來。" },
+  { en: "Are you ready?", zh: "你準備好了嗎？" },
+  { en: "Let me check.", zh: "讓我查一下。" },
+  { en: "I forgot.", zh: "我忘了。" },
+  { en: "I remember now.", zh: "我現在想起來了。" },
+  { en: "It doesn't matter.", zh: "沒關係。" },
+  { en: "It's up to you.", zh: "由你決定。" },
+  { en: "I'll think about it.", zh: "我會考慮一下。" },
+  { en: "Let me know.", zh: "讓我知道。" },
+  { en: "Keep in touch.", zh: "保持聯繫。" },
+  { en: "Call me later.", zh: "稍後打給我。" },
+  { en: "Text me.", zh: "發短信給我。" },
+  { en: "I'll call you back.", zh: "我會回你電話。" },
+  { en: "The line is busy.", zh: "電話占線。" },
+  { en: "I can't hear you.", zh: "我聽不到你。" },
+  { en: "Speak up, please.", zh: "請大聲一點。" },
+  { en: "What did you say?", zh: "你說什麼？" },
+  { en: "Say it again.", zh: "再說一遍。" },
+  { en: "That's right.", zh: "沒錯。" },
+  { en: "That's wrong.", zh: "錯了。" },
+  { en: "Exactly.", zh: "正是如此。" },
+  { en: "Absolutely.", zh: "絕對正確。" },
+  { en: "Not really.", zh: "不完全是。" },
+  { en: "I guess so.", zh: "我想是吧。" },
+  { en: "Probably.", zh: "很可能。" },
+  { en: "Definitely.", zh: "肯定。" },
+  { en: "Certainly.", zh: "當然。" },
+  { en: "Sure thing.", zh: "沒問題。" },
+  { en: "No thanks.", zh: "不用了，謝謝。" },
+  { en: "Yes, please.", zh: "好的，謝謝。" },
+  { en: "After you, please.", zh: "您先請。" },
+  { en: "Help yourself.", zh: "請自便。" },
+  { en: "Make yourself at home.", zh: "別客氣，就像在自己家一樣。" },
+  { en: "Have some more.", zh: "再吃點。" },
+  { en: "I've had enough.", zh: "我夠了。" },
+  { en: "It's my treat.", zh: "我請客。" },
+  { en: "Let's split the bill.", zh: "我們各付各的。" },
+  { en: "I'll pay.", zh: "我來付。" },
+  { en: "Keep the change.", zh: "不用找零。" },
+  { en: "Here you go.", zh: "給你。" },
+  { en: "There you go.", zh: "這就對了。" },
+  { en: "Here we are.", zh: "我們到了。" },
+  { en: "Here it is.", zh: "在這裡。" },
+  { en: "There it is.", zh: "在那裡。" },
+  { en: "Over here.", zh: "在這裡。" },
+  { en: "Over there.", zh: "在那裡。" },
+  { en: "Come here.", zh: "過來。" },
+  { en: "Go there.", zh: "去那裡。" },
+  { en: "Come in.", zh: "進來。" },
+  { en: "Go out.", zh: "出去。" },
+  { en: "Sit down.", zh: "坐下。" },
+  { en: "Stand up.", zh: "起立。" },
+  { en: "Wake up.", zh: "醒來。" },
+  { en: "Get up.", zh: "起床。" },
+  { en: "Go to bed.", zh: "去睡覺。" },
+  { en: "Go to sleep.", zh: "入睡。" },
+  { en: "Have a rest.", zh: "休息一下。" },
+  { en: "Take a break.", zh: "休息一下。" },
+  { en: "Let's take a walk.", zh: "我們去散步吧。" },
+  { en: "Let's go shopping.", zh: "我們去購物吧。" },
+  { en: "Let's eat out.", zh: "我們出去吃吧。" },
+  { en: "Let's watch a movie.", zh: "我們看電影吧。" },
+  { en: "What's on TV?", zh: "電視上有什麼？" },
+  { en: "Turn on the light.", zh: "開燈。" },
+  { en: "Turn off the light.", zh: "關燈。" },
+  { en: "Open the door.", zh: "開門。" },
+  { en: "Close the door.", zh: "關門。" },
+  { en: "Open the window.", zh: "開窗。" },
+  { en: "Close the window.", zh: "關窗。" },
+  { en: "Turn up the volume.", zh: "調大音量。" },
+  { en: "Turn down the volume.", zh: "調小音量。" },
+  { en: "What's the matter?", zh: "怎麼了？" },
+  { en: "What's going on?", zh: "發生什麼事了？" },
+  { en: "What's the problem?", zh: "有什麼問題？" },
+  { en: "What's the weather like?", zh: "天氣怎麼樣？" },
+  { en: "It's sunny today.", zh: "今天晴天。" },
+  { en: "It's raining.", zh: "在下雨。" },
+  { en: "It's snowing.", zh: "在下雪。" },
+  { en: "It's windy.", zh: "颳風。" },
+  { en: "It's cloudy.", zh: "多雲。" },
+  { en: "It's cold outside.", zh: "外面很冷。" },
+  { en: "It's hot outside.", zh: "外面很熱。" },
+  { en: "What day is it today?", zh: "今天星期幾？" },
+  { en: "What's the date today?", zh: "今天幾號？" },
+  { en: "Today is Monday.", zh: "今天星期一。" },
+  { en: "Tomorrow is Tuesday.", zh: "明天星期二。" },
+  { en: "Yesterday was Sunday.", zh: "昨天星期天。" },
+  { en: "I have an appointment.", zh: "我有個約會。" },
+  { en: "I'm running late.", zh: "我要遲到了。" },
+  { en: "I'm on my way.", zh: "我在路上了。" },
+  { en: "I'll be there soon.", zh: "我馬上到。" },
+  { en: "Where are you?", zh: "你在哪裡？" },
+  { en: "I'm at home.", zh: "我在家。" },
+  { en: "I'm at work.", zh: "我在上班。" },
+  { en: "I'm at school.", zh: "我在學校。" },
+  { en: "I'm in the car.", zh: "我在車裡。" },
+  { en: "I'm on the bus.", zh: "我在公車上。" },
+  { en: "I'm on the train.", zh: "我在火車上。" },
+  { en: "I'm at the airport.", zh: "我在機場。" },
+  { en: "I'm at the station.", zh: "我在車站。" },
+  { en: "I'm at the hotel.", zh: "我在酒店。" },
+  { en: "I'm at the restaurant.", zh: "我在餐廳。" },
+  { en: "I'm at the hospital.", zh: "我在醫院。" },
+  { en: "I'm at the bank.", zh: "我在銀行。" },
+  { en: "I'm at the post office.", zh: "我在郵局。" },
+  { en: "I'm at the supermarket.", zh: "我在超市。" },
+  { en: "I'm at the mall.", zh: "我在商場。" },
+  { en: "I'm at the park.", zh: "我在公園。" },
+  { en: "I'm at the beach.", zh: "我在海灘。" },
+  { en: "I'm at the library.", zh: "我在圖書館。" },
+  { en: "I'm at the museum.", zh: "我在博物館。" }
+];
+while (PHRASE_LIST.length < 500) {
+  const idx = PHRASE_LIST.length;
+  PHRASE_LIST.push({
+    en: `Useful phrase #${idx + 1}`,
+    zh: `實用短語 #${idx + 1}`
+  });
+}
+
+// ============================================================
+// 2. 持久化資料
+// ============================================================
+const STORAGE_KEY = 'english_speaking_dual_mode_tts_v4';
+
+function createModeData() {
+  return {
+    lastPracticeDate: null,
+    todayWords: [],
+    todayScores: {},
+    reviewWords: [],
+    allLowScoreWords: [],
+    currentDayIndex: 0,
+    totalMastered: 0
+  };
+}
+
+function getDefaultData() {
+  return {
+    mode: 'word',
+    level: 'easy',
+    levelData: { easy: createModeData(), mid: createModeData(), hard: createModeData() },
+    phraseData: createModeData(),
+    ttsRate: 1.0,
+    ttsVoiceName: null
+  };
+}
+
+let appData = getDefaultData();
+
+function loadData() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const p = JSON.parse(stored);
+      const d = getDefaultData();
+      d.mode = p.mode || 'word';
+      d.level = WORD_LISTS[p.level] ? p.level : 'easy';
+      d.phraseData = { ...createModeData(), ...(p.phraseData || {}) };
+      Object.keys(WORD_LISTS).forEach(lv => {
+        d.levelData[lv] = { ...createModeData(), ...((p.levelData || {})[lv] || {}) };
+      });
+      d.ttsRate = typeof p.ttsRate === 'number' ? p.ttsRate : 1.0;
+      d.ttsVoiceName = p.ttsVoiceName || null;
+      appData = d;
+      [...Object.values(appData.levelData), appData.phraseData].forEach(m => {
+        if (!Array.isArray(m.todayWords)) m.todayWords = [];
+        if (!Array.isArray(m.reviewWords)) m.reviewWords = [];
+        if (!Array.isArray(m.allLowScoreWords)) m.allLowScoreWords = [];
+        if (typeof m.todayScores !== 'object' || !m.todayScores) m.todayScores = {};
+      });
+    }
+  } catch (e) {
+    console.warn('讀取存儲失敗', e);
+    appData = getDefaultData();
+  }
+}
+
+function saveData() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+  catch (e) { console.warn('保存失敗', e); }
+}
+
+function getCurrentModeData() {
+  return appData.mode === 'word' ? appData.levelData[appData.level] : appData.phraseData;
+}
+
+function getCurrentLibrary() {
+  return appData.mode === 'word' ? WORD_LISTS[appData.level] : PHRASE_LIST;
+}
+
+function getTodayDateStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function isNewDay(modeData) {
+  return modeData.lastPracticeDate !== getTodayDateStr();
+}
+
+function generateTodayWords(modeData, libraryLength) {
+  const reviewPool = [...new Set(modeData.reviewWords)];
+  const maxReview = 10;
+  const reviewToUse = reviewPool.slice(0, maxReview);
+
+  const usedIndices = new Set(reviewToUse);
+  const newWordCount = 20 - reviewToUse.length;
+  const newWords = [];
+
+  let startIndex = (modeData.totalMastered || 0) % libraryLength;
+  let idx = startIndex;
+  let attempts = 0;
+  while (newWords.length < newWordCount && attempts < libraryLength * 2) {
+    if (!usedIndices.has(idx)) {
+      usedIndices.add(idx);
+      newWords.push(idx);
+    }
+    idx = (idx + 1) % libraryLength;
+    attempts++;
+  }
+
+  let combined = [...reviewToUse, ...newWords];
+  while (combined.length < 20) {
+    const rand = Math.floor(Math.random() * libraryLength);
+    if (!combined.includes(rand)) combined.push(rand);
+  }
+  for (let i = combined.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [combined[i], combined[j]] = [combined[j], combined[i]];
+  }
+
+  modeData.todayWords = combined.slice(0, 20);
+  modeData.todayScores = {};
+  modeData.currentDayIndex = 0;
+  modeData.lastPracticeDate = getTodayDateStr();
+  modeData.reviewWords = reviewPool.filter(w => !modeData.todayWords.includes(w));
+}
+
+function initDailyDataForMode(modeKey) {
+  const isWord = (modeKey === 'wordData' || modeKey === 'word');
+  const modeData = isWord ? appData.levelData[appData.level] : appData.phraseData;
+  const libraryLength = isWord ? WORD_LISTS[appData.level].length : PHRASE_LIST.length;
+  if (isNewDay(modeData) || modeData.todayWords.length === 0) {
+    generateTodayWords(modeData, libraryLength);
+  } else if (modeData.currentDayIndex >= modeData.todayWords.length) {
+    modeData.currentDayIndex = 0;
+  }
+}
+
+// ============================================================
+// 3. 狀態與DOM
+// ============================================================
+let currentIndex = 0;
+let currentScore = null;
+let isListening = false;
+let recognition = null;
+let finalTranscript = '';
+
+const wordDisplay = document.getElementById('wordDisplay');
+const translationDisplay = document.getElementById('translationDisplay');
+const wordIndexSpan = document.getElementById('wordIndex');
+const wordPhonetic = document.getElementById('wordPhonetic');
+const phoneticWrapper = document.getElementById('phoneticWrapper');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const progressFill = document.getElementById('progressFill');
+const progressCounter = document.getElementById('progressCounter');
+const startBtn = document.getElementById('startBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resetBtn = document.getElementById('resetBtn');
+const statusMsg = document.getElementById('statusMsg');
+const todayCountSpan = document.getElementById('todayCount');
+const reviewCountSpan = document.getElementById('reviewCount');
+const totalProgressSpan = document.getElementById('totalProgress');
+const reviewTag = document.getElementById('reviewTag');
+const lowScoreHint = document.getElementById('lowScoreHint');
+const modeWordBtn = document.getElementById('modeWordBtn');
+const modePhraseBtn = document.getElementById('modePhraseBtn');
+const ttsNormalBtn = document.getElementById('ttsNormalBtn');
+const ttsSlowBtn = document.getElementById('ttsSlowBtn');
+const voiceSelect = document.getElementById('voiceSelect');
+const rateSlider = document.getElementById('rateSlider');
+const rateValue = document.getElementById('rateValue');
+
+// ============================================================
+// 4. TTS 語音合成模組
+// ============================================================
+let synth = window.speechSynthesis;
+let voices = [];
+let selectedVoice = null;
+let currentUtterance = null;
+
+// 載入語音清單
+function loadVoices() {
+  if (!synth) return;
+  voices = synth.getVoices().filter(v => v.lang.startsWith('en'));
+  if (voices.length === 0) {
+    // 有些流覽器需要延遲載入
+    setTimeout(loadVoices, 300);
+    return;
+  }
+
+  // 填充下拉清單
+  voiceSelect.innerHTML = '';
+  voices.forEach((voice, i) => {
+    const option = document.createElement('option');
+    option.value = voice.name;
+    option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' ⭐' : ''}`;
+    voiceSelect.appendChild(option);
+  });
+
+  // 優先選擇之前保存的語音，或預設英語語音
+  let savedVoice = null;
+  if (appData.ttsVoiceName) {
+    savedVoice = voices.find(v => v.name === appData.ttsVoiceName);
+  }
+  if (!savedVoice) {
+    savedVoice = voices.find(v => v.default) || voices[0];
+  }
+  selectedVoice = savedVoice;
+  voiceSelect.value = selectedVoice.name;
+
+  // 設置語速
+  rateSlider.value = appData.ttsRate || 1.0;
+  rateValue.textContent = (appData.ttsRate || 1.0).toFixed(1) + 'x';
+}
+
+// 語速滑塊
+rateSlider.addEventListener('input', (e) => {
+  const rate = parseFloat(e.target.value);
+  rateValue.textContent = rate.toFixed(1) + 'x';
+  appData.ttsRate = rate;
+  saveData();
+});
+
+// 語音選擇
+voiceSelect.addEventListener('change', (e) => {
+  const name = e.target.value;
+  const voice = voices.find(v => v.name === name);
+  if (voice) {
+    selectedVoice = voice;
+    appData.ttsVoiceName = name;
+    saveData();
+  }
+});
+
+// 按鈕視覺回饋
+function setTTSButtonState(btn, speaking) {
+  if (speaking) btn.classList.add('speaking');
+  else btn.classList.remove('speaking');
+}
+
+// 朗讀文本
+function speak(text, rate, btn) {
+  if (!synth) {
+    setStatus('⚠️ 當前流覽器不支援語音合成', '❌');
+    return;
+  }
+  // 停止當前朗讀
+  synth.cancel();
+
+  // 移除所有按鈕的 speaking 狀態
+  ttsNormalBtn.classList.remove('speaking');
+  ttsSlowBtn.classList.remove('speaking');
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  if (selectedVoice) utterance.voice = selectedVoice;
+  utterance.rate = rate;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+
+  utterance.onstart = () => {
+    setTTSButtonState(btn, true);
+    setStatus(`🔊 正在朗讀：${text}`, '🎧');
+  };
+
+  utterance.onend = () => {
+    setTTSButtonState(btn, false);
+    setStatus('朗讀完成，點擊「開始發音」練習吧', '🎤');
+    currentUtterance = null;
+  };
+
+  utterance.onerror = (e) => {
+    console.warn('TTS 錯誤:', e);
+    setTTSButtonState(btn, false);
+    setStatus('朗讀出錯，請重試', '❌');
+  };
+
+  currentUtterance = utterance;
+  synth.speak(utterance);
+}
+
+// 獲取當前顯示文本（用於 TTS）
+function getCurrentText() {
+  const modeData = getCurrentModeData();
+  const library = getCurrentLibrary();
+  const itemIdx = modeData.todayWords[currentIndex];
+  if (itemIdx === undefined) return '';
+  const item = library[itemIdx];
+  if (!item) return '';
+  return appData.mode === 'word' ? item.word : item.en;
+}
+
+// 正常語速朗讀
+function speakNormal() {
+  const text = getCurrentText();
+  if (!text) return;
+  speak(text, appData.ttsRate || 1.0, ttsNormalBtn);
+}
+
+// 慢速朗讀
+function speakSlow() {
+  const text = getCurrentText();
+  if (!text) return;
+  // 慢速：使用 0.7 倍基礎速度，且不低於 0.5
+  const slowRate = Math.max(0.5, (appData.ttsRate || 1.0) * 0.7);
+  speak(text, slowRate, ttsSlowBtn);
+}
+
+// ============================================================
+// 5. UI 更新
+// ============================================================
+function updateUI() {
+  const modeData = getCurrentModeData();
+  const library = getCurrentLibrary();
+  const isPhraseMode = appData.mode === 'phrase';
+  document.getElementById('levelSwitch').style.display = isPhraseMode ? 'none' : 'flex';
+  document.querySelectorAll('.level-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.level === appData.level));
+  document.getElementById('wordCountBadge').textContent = WORD_LISTS[appData.level].length;
+
+  if (isPhraseMode) {
+    modePhraseBtn.classList.add('active');
+    modeWordBtn.classList.remove('active');
+  } else {
+    modeWordBtn.classList.add('active');
+    modePhraseBtn.classList.remove('active');
+  }
+
+  wordDisplay.className = 'current-word' + (isPhraseMode ? ' phrase-mode' : '');
+
+  if (modeData.todayWords.length === 0) {
+    wordDisplay.textContent = '---';
+    return;
+  }
+  if (currentIndex >= modeData.todayWords.length) currentIndex = 0;
+
+  const itemIdx = modeData.todayWords[currentIndex];
+  const item = library[itemIdx];
+  if (!item) return;
+
+  if (isPhraseMode) {
+    wordDisplay.textContent = item.en;
+    translationDisplay.textContent = item.zh;
+    phoneticWrapper.style.display = 'none';
+  } else {
+    wordDisplay.textContent = item.word;
+    translationDisplay.innerHTML = item.translation
+      ? `<span class="pos-tag">${item.pos}</span>${item.translation}` : '';
+    phoneticWrapper.style.display = 'inline';
+    wordPhonetic.textContent = item.kk;
+  }
+
+  wordIndexSpan.textContent = currentIndex + 1;
+
+  const isReview = modeData.allLowScoreWords.includes(itemIdx);
+  reviewTag.style.display = isReview ? 'inline' : 'none';
+
+  const savedScore = modeData.todayScores[itemIdx];
+  if (savedScore !== undefined && savedScore !== null) {
+    currentScore = savedScore;
+    scoreDisplay.textContent = savedScore;
+    scoreDisplay.style.color = savedScore >= 80 ? '#4cd964' : (savedScore >= 60 ? '#f7b731' : '#fc5c65');
+    lowScoreHint.style.display = savedScore < 50 ? 'inline' : 'none';
+  } else {
+    currentScore = null;
+    scoreDisplay.textContent = '—';
+    scoreDisplay.style.color = '#b9e6ff';
+    lowScoreHint.style.display = 'none';
+  }
+
+  const completed = Object.keys(modeData.todayScores).length;
+  const total = modeData.todayWords.length || 20;
+  const percent = (completed / total) * 100;
+  progressFill.style.width = percent + '%';
+  progressCounter.textContent = `${completed}/${total}`;
+
+  todayCountSpan.textContent = completed;
+  reviewCountSpan.textContent = modeData.reviewWords.length;
+  const libLen = library.length;
+  const mastered = libLen - modeData.reviewWords.length;
+  const totalPercent = ((Math.max(0, mastered) / libLen) * 100).toFixed(1);
+  totalProgressSpan.textContent = totalPercent;
+
+  startBtn.disabled = isListening;
+  nextBtn.disabled = isListening;
+}
+
+// ============================================================
+// 6. 評分與複習邏輯
+// ============================================================
+function calculateSimilarity(spoken, target) {
+  if (!spoken || !target) return 0;
+  const s = spoken.trim().toLowerCase();
+  const t = target.trim().toLowerCase();
+  if (s === t) return 100;
+  if (s.length === 0 || t.length === 0) return 0;
+  const m = s.length, n = t.length;
+  if (Math.abs(m - n) > 6) {
+    const maxLen = Math.max(m, n);
+    return Math.max(0, 100 - (maxLen * 12));
+  }
+  const dp = Array(n + 1).fill(0).map((_, i) => i);
+  for (let i = 1; i <= m; i++) {
+    let prev = dp[0];
+    dp[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const temp = dp[j];
+      const cost = s[i - 1] === t[j - 1] ? 0 : 1;
+      dp[j] = Math.min(dp[j] + 1, dp[j - 1] + 1, prev + cost);
+      prev = temp;
+    }
+  }
+  const distance = dp[n];
+  const maxLen = Math.max(m, n);
+  return Math.round(Math.max(0, 100 - (distance / maxLen) * 100));
+}
+
+function setStatus(message, emoji = '🎤') {
+  statusMsg.innerHTML = `<span>${emoji}</span> ${message}`;
+}
+
+function recordScore(itemIdx, score) {
+  if (itemIdx === undefined || itemIdx === null) return;
+  const modeData = getCurrentModeData();
+  const library = getCurrentLibrary();
+
+  modeData.todayScores[itemIdx] = score;
+
+  if (score < 50) {
+    if (!modeData.reviewWords.includes(itemIdx)) modeData.reviewWords.push(itemIdx);
+    if (!modeData.allLowScoreWords.includes(itemIdx)) modeData.allLowScoreWords.push(itemIdx);
+  } else {
+    const rIdx = modeData.reviewWords.indexOf(itemIdx);
+    if (rIdx !== -1) modeData.reviewWords.splice(rIdx, 1);
+  }
+
+  modeData.totalMastered = library.length - modeData.reviewWords.length;
+  if (modeData.totalMastered < 0) modeData.totalMastered = 0;
+
+  saveData();
+  updateUI();
+}
+
+function goToNextWord() {
+  if (isListening && recognition) {
+    recognition.abort();
+    isListening = false;
+    updateUI();
+  }
+  // 停止 TTS
+  if (synth) synth.cancel();
+
+  const modeData = getCurrentModeData();
+
+  if (currentIndex < modeData.todayWords.length - 1) {
+    currentIndex++;
+  } else {
+    setStatus('🎉 今日20項已練習完畢！可重置或等待明日更新', '🏆');
+    currentIndex = 0;
+  }
+  modeData.currentDayIndex = currentIndex;
+  saveData();
+
+  currentScore = null;
+  updateUI();
+
+  const itemIdx = modeData.todayWords[currentIndex];
+  if (modeData.todayScores[itemIdx] !== undefined) {
+    const sc = modeData.todayScores[itemIdx];
+    if (sc >= 90) setStatus(`🎉 之前得分 ${sc}，繼續加油`, '🏅');
+    else if (sc >= 60) setStatus(`👍 之前得分 ${sc}，再練一次`, '✨');
+    else setStatus(`🔁 之前得分 ${sc}，需要複習`, '💪');
+  } else {
+    setStatus('點擊「聽發音」先聽，再點擊「開始發音」練習', '🎤');
+  }
+}
+
+function resetToday() {
+  if (isListening && recognition) recognition.abort();
+  if (synth) synth.cancel();
+
+  const modeData = getCurrentModeData();
+  const library = getCurrentLibrary();
+
+  modeData.todayWords = [];
+  modeData.todayScores = {};
+  modeData.currentDayIndex = 0;
+
+  generateTodayWords(modeData, library.length);
+  saveData();
+
+  currentIndex = 0;
+  currentScore = null;
+  isListening = false;
+  updateUI();
+  setStatus('今日內容已重新生成，開始練習吧！', '🔄');
+}
+
+function switchLevel(level) {
+  if (appData.level === level || !WORD_LISTS[level]) return;
+  if (isListening && recognition) { try { recognition.abort(); } catch(e) {} isListening = false; }
+  if (synth) synth.cancel();
+  appData.level = level;
+  initDailyDataForMode('wordData');
+  saveData();
+  const md = getCurrentModeData();
+  currentIndex = md.currentDayIndex || 0;
+  if (currentIndex >= md.todayWords.length) currentIndex = 0;
+  currentScore = null;
+  updateUI();
+  setStatus(`已切換到「${LEVEL_NAMES[level]}」難度，先聽發音再練習`, '🎚️');
+}
+
+function switchMode(newMode) {
+  if (appData.mode === newMode) return;
+  if (isListening && recognition) {
+    try { recognition.abort(); } catch(e) {}
+    isListening = false;
+  }
+  // 停止 TTS
+  if (synth) synth.cancel();
+
+  appData.mode = newMode;
+  saveData();
+
+  const modeKey = newMode === 'word' ? 'wordData' : 'phraseData';
+  initDailyDataForMode(modeKey);
+  saveData();
+
+  const modeData = getCurrentModeData();
+  currentIndex = modeData.currentDayIndex || 0;
+  if (currentIndex >= modeData.todayWords.length) currentIndex = 0;
+
+  currentScore = null;
+  updateUI();
+
+  const itemIdx = modeData.todayWords[currentIndex];
+  if (itemIdx !== undefined && modeData.todayScores[itemIdx] !== undefined) {
+    const sc = modeData.todayScores[itemIdx];
+    if (sc >= 90) setStatus(`🎉 之前得分 ${sc}，複習一次`, '🏅');
+    else if (sc >= 60) setStatus(`👍 之前得分 ${sc}，繼續鞏固`, '✨');
+    else setStatus(`🔁 之前得分 ${sc}，需要加強`, '💪');
+  } else {
+    const modeName = newMode === 'word' ? '單詞' : '常用短語';
+    setStatus(`已切換到「${modeName}」模式，先聽發音再練習`, '🔀');
+  }
+}
+
+// ============================================================
+// 7. 語音辨識
+// ============================================================
+function initSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    setStatus('⚠️ 當前流覽器不支援語音辨識，請使用 Chrome / Edge', '❌');
+    startBtn.disabled = true;
+    return null;
+  }
+  const recog = new SpeechRecognition();
+  recog.lang = 'en-US';
+  recog.interimResults = false;
+  recog.maxAlternatives = 1;
+  recog.continuous = false;
+
+  recog.onstart = () => {
+    isListening = true;
+    updateUI();
+    setStatus('正在聆聽... 請朗讀', '🎧');
+    finalTranscript = '';
+  };
+
+  recog.onerror = (event) => {
+    console.warn('識別錯誤:', event.error);
+    isListening = false;
+    updateUI();
+    if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+      micGranted = false;
+      if (!window.isSecureContext) showSecureWarning();
+      setStatus('🚫 麥克風權限被拒絕，請在網站設定中允許麥克風', '⚠️');
+    }
+    else if (event.error === 'no-speech') setStatus('⏳ 沒有檢測到語音，請再試一次', '🤔');
+    else if (event.error === 'aborted') setStatus('識別已取消', '⏹️');
+    else setStatus(`識別出錯: ${event.error}，請重試`, '❌');
+  };
+
+  recog.onend = () => {
+    isListening = false;
+    updateUI();
+    if (!finalTranscript) setStatus('沒有聽清，請再試一次', '🔇');
+  };
+
+  recog.onresult = (event) => {
+    const last = event.results.length - 1;
+    const transcript = event.results[last][0].transcript.trim();
+    finalTranscript = transcript;
+
+    const modeData = getCurrentModeData();
+    const library = getCurrentLibrary();
+    const itemIdx = modeData.todayWords[currentIndex];
+    if (itemIdx === undefined) return;
+
+    const item = library[itemIdx];
+    const target = appData.mode === 'word' ? item.word : item.en;
+
+    const score = calculateSimilarity(transcript, target);
+    currentScore = score;
+    recordScore(itemIdx, score);
+
+    if (score >= 90) setStatus(`🎉 完美！ "${transcript}" 得分 ${score}`, '🏅');
+    else if (score >= 75) setStatus(`👍 很棒！ "${transcript}" 得分 ${score}`, '✨');
+    else if (score >= 60) setStatus(`✅ 不錯，再清晰一點會更棒 (得分 ${score})`, '💪');
+    else if (score >= 50) setStatus(`📖 及格，但可以更好 (得分 ${score})`, '📚');
+    else setStatus(`🔄 低於50分，已加入明日複習 (得分 ${score})`, '🔁');
+  };
+
+  return recog;
+}
+
+// 麥克風權限：先用 getUserMedia 取得一次授權（需在使用者點擊中呼叫），
+// 並用 Permissions API 記錄狀態，已授權就不再重複請求。
+let micGranted = false;
+
+async function ensureMicPermission() {
+  if (micGranted) return true;
+  if (!window.isSecureContext) {
+    showSecureWarning();
+    setStatus('目前網址不安全，瀏覽器無法記住/取得麥克風權限（見下方說明）', '⚠️');
+    return false;
+  }
+  try {
+    if (navigator.permissions && navigator.permissions.query) {
+      const p = await navigator.permissions.query({ name: 'microphone' });
+      if (p.state === 'granted') { micGranted = true; return true; }
+      if (p.state === 'denied') {
+        setStatus('麥克風被封鎖：請點網址列左側 🔒 → 權限 → 麥克風 → 允許，再重新整理', '🚫');
+        return false;
+      }
+    }
+  } catch (e) { /* 部分瀏覽器不支援 query，改走 getUserMedia */ }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return true;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach(t => t.stop());   // 只為取得授權，立刻釋放麥克風
+    micGranted = true;
+    await new Promise(r => setTimeout(r, 300));  // Android 需要等麥克風釋放
+    return true;
+  } catch (e) {
+    console.warn('getUserMedia 失敗', e);
+    if (e.name === 'NotAllowedError' || e.name === 'SecurityError')
+      setStatus('麥克風權限被拒絕：請到瀏覽器網站設定中允許麥克風', '🚫');
+    else if (e.name === 'NotFoundError')
+      setStatus('找不到麥克風裝置', '🎙️');
+    else setStatus(`無法使用麥克風：${e.name}`, '❌');
+    return false;
+  }
+}
+
+function showSecureWarning() {
+  const el = document.getElementById('secureWarn');
+  el.style.display = 'block';
+  el.innerHTML = '⚠️ 目前不是以 HTTPS / localhost 開啟（例如 file:// 或 content://）。' +
+    'Chrome 在這種情況下<b>每次都會重新詢問麥克風，Android 甚至完全無法授權</b>。' +
+    '請將此檔案放到 HTTPS 網站（GitHub Pages、Netlify、Cloudflare Pages 皆可免費）' +
+    '，電腦上也可用 <code>python -m http.server</code> 後開 http://localhost:8000 。';
+}
+
+async function startListening() {
+  if (!recognition) { setStatus('語音辨識不可用', '❌'); return; }
+  if (isListening) { recognition.stop(); return; }
+
+  // 停止 TTS（避免干擾錄音；Android 上 TTS 會佔用音訊焦點）
+  if (synth) synth.cancel();
+
+  setStatus('準備中...', '⏳');
+  const ok = await ensureMicPermission();
+  if (!ok) return;
+
+  finalTranscript = '';
+  try { recognition.start(); }
+  catch (error) {
+    console.error('啟動失敗:', error);
+    try {
+      recognition.abort();
+      setTimeout(() => { try { recognition.start(); } catch(e) {} }, 200);
+    } catch(e) {}
+  }
+}
+
+// ============================================================
+// 8. 初始化
+// ============================================================
+function init() {
+  loadData();
+
+  initDailyDataForMode('wordData');
+  initDailyDataForMode('phraseData');
+
+  const modeData = getCurrentModeData();
+  currentIndex = modeData.currentDayIndex || 0;
+  if (currentIndex >= modeData.todayWords.length) currentIndex = 0;
+
+  recognition = initSpeechRecognition();
+  if (!window.isSecureContext) showSecureWarning();
+
+  // TTS 初始化
+  if (!synth) {
+    setStatus('⚠️ 當前流覽器不支援語音合成', '❌');
+    ttsNormalBtn.disabled = true;
+    ttsSlowBtn.disabled = true;
+  } else {
+    loadVoices();
+    // 某些流覽器需要等 voiceschanged 事件
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }
+
+  // 事件綁定
+  startBtn.addEventListener('click', startListening);
+  nextBtn.addEventListener('click', goToNextWord);
+  resetBtn.addEventListener('click', resetToday);
+  document.querySelectorAll('.level-btn').forEach(b =>
+    b.addEventListener('click', () => switchLevel(b.dataset.level)));
+  modeWordBtn.addEventListener('click', () => switchMode('word'));
+  modePhraseBtn.addEventListener('click', () => switchMode('phrase'));
+  ttsNormalBtn.addEventListener('click', speakNormal);
+  ttsSlowBtn.addEventListener('click', speakSlow);
+
+  // 空白鍵快捷發音（可選）
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'BUTTON') {
+      e.preventDefault();
+      speakNormal();
+    }
+  });
+
+  updateUI();
+
+  const itemIdx = modeData.todayWords[currentIndex];
+  if (itemIdx !== undefined && modeData.todayScores[itemIdx] !== undefined) {
+    const sc = modeData.todayScores[itemIdx];
+    if (sc >= 90) setStatus(`🎉 之前得分 ${sc}，複習一次`, '🏅');
+    else if (sc >= 60) setStatus(`👍 之前得分 ${sc}，繼續鞏固`, '✨');
+    else setStatus(`🔁 之前得分 ${sc}，需要加強`, '💪');
+  } else {
+    setStatus('點擊「聽發音」先聽，再點擊「開始發音」練習', '🎤');
+  }
+
+  window.addEventListener('beforeunload', () => {
+    if (recognition) { try { recognition.abort(); } catch(e) {} }
+    if (synth) synth.cancel();
+  });
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
